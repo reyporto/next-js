@@ -1,1 +1,1 @@
-export * from './Layaout'
+export * from "./Layaout";
