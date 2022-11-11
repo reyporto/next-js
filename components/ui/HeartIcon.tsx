@@ -2,7 +2,7 @@ import { FC } from "react";
 
 interface Props {
   fill: string;
-  filled: boolean;
+  filled: Boolean;
   size?: number;
   height?: number;
   width?: number;

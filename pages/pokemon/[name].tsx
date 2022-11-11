@@ -1,14 +1,6 @@
 import { useState } from "react";
 import { NextPage, GetStaticPaths, GetStaticProps } from "next";
-import {
-  Button,
-  Card,
-  Container,
-  Grid,
-  Image,
-  Spacer,
-  Text,
-} from "@nextui-org/react";
+import { Button, Card, Container, Grid, Image, Text } from "@nextui-org/react";
 import confetti from "canvas-confetti";
 import { pokeApi } from "../../api";
 import { Layaout } from "../../components/layouts";
@@ -17,6 +9,7 @@ import { localFavorites } from "../../utils";
 import { PokemonListResponse } from "../../interfaces/pokemon-list";
 import { FavoritePokemon } from "../../interfaces/favorite-pokemon";
 import { HeartIcon } from "../../components/ui/HeartIcon";
+import { PokemonSprites } from "../../components/pokemon/PokemonSprites";
 
 interface Props {
   pokemon: PokemonResponse;
@@ -86,51 +79,34 @@ const PokemonPage: NextPage<Props> = ({ pokemon }) => {
             <Card.Header
               css={{
                 display: "flex",
-                justifyContent: "space-between",
+                justifyContent: "flex-start",
+                flexDirection: "column",
+                alignItems: "start",
               }}
             >
-              <Text transform="capitalize" h1>
-                {pokemon.name}
-              </Text>
-              <Grid>
+              <Grid css={{
+                paddingBottom: 0,
+              }}>
+                <Text transform="capitalize" h1>
+                  {pokemon.name}
+                </Text>
+              </Grid>
+              <Grid css={{
+                paddingTop: 0,
+              }}>
                 <Button
                   size="sm"
-                  light
-                  color={isInFavorites ? 'error' : 'gradient'}
+                  color={isInFavorites ? "error" : "error"}
                   onClick={onToggleFavorite}
-                  rounded
-                  icon={<HeartIcon fill="currentColor" filled />}
-                />
+                  shadow={isInFavorites ? true : false}
+                  icon={<HeartIcon fill="currentColor" filled={isInFavorites} />}
+                >
+                  Favorito
+                </Button>
               </Grid>
             </Card.Header>
             <Card.Body>
-              <Text size={30}>Sprites:</Text>
-              <Container direction="row" display="flex">
-                <Image
-                  src={pokemon.sprites.front_default}
-                  alt={pokemon.name}
-                  width={100}
-                  height={100}
-                />
-                <Image
-                  src={pokemon.sprites.back_default}
-                  alt={pokemon.name}
-                  width={100}
-                  height={100}
-                />
-                <Image
-                  src={pokemon.sprites.front_shiny}
-                  alt={pokemon.name}
-                  width={100}
-                  height={100}
-                />
-                <Image
-                  src={pokemon.sprites.back_shiny}
-                  alt={pokemon.name}
-                  width={100}
-                  height={100}
-                />
-              </Container>
+              <PokemonSprites sprites={pokemon.sprites} name={pokemon.name} />
             </Card.Body>
           </Card>
         </Grid>
