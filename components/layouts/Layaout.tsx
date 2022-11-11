@@ -16,18 +16,9 @@ export const Layaout: FC<Props> = ({ children, title, image }) => {
         <meta name="author" content="Reinaldo Porto" />
         <meta name="description" content="Pokemon App" />
         <meta name="keywords" content={`${title}, pokémon, pokédex`} />
-        <meta
-          property="og:title"
-          content={title || "Pokémon App"}
-        />
-        <meta
-          property="og:description"
-          content={title || "Pokémon App"}
-        />
-        <meta
-          property="og:image"
-          content={image}
-        />
+        <meta property="og:title" content={title || "Pokémon App"} />
+        <meta property="og:description" content={title || "Pokémon App"} />
+        <meta property="og:image" content={image} />
       </Head>
 
       <Navbar />
