@@ -9,9 +9,12 @@ interface Props {
   pokemons: SmallPokemon[];
 }
 
+const origin = (typeof window === 'undefined') ? '' : window.location.origin
+
 const Home: NextPage<Props> = ({ pokemons }) => {
+
   return (
-    <Layaout title="Listado de Pokémons">
+    <Layaout title="Listado de Pokémons" image={`${origin}/img/banner.png`}>
       <Grid.Container gap={2} justify="flex-start">
         {pokemons.map((pokemon, i) => (
           <PokemonCard key={i} pokemon={pokemon} />

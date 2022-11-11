@@ -4,7 +4,7 @@ import { Button, Card, Container, Grid, Image, Text } from "@nextui-org/react";
 import confetti from "canvas-confetti";
 import { pokeApi } from "../../api";
 import { Layaout } from "../../components/layouts";
-import { PokemonResponse } from "../../interfaces/pokemon";
+import { PokemonResponse, Sprites } from "../../interfaces/pokemon";
 import { localFavorites } from "../../utils";
 import { PokemonListResponse } from "../../interfaces/pokemon-list";
 import { FavoritePokemon } from "../../interfaces/favorite-pokemon";
@@ -18,7 +18,8 @@ const PokemonPage: NextPage<Props> = ({ pokemon }) => {
     id: pokemon.id,
     name: pokemon.name,
   };
-
+  const frontDefault =
+    pokemon.sprites.other?.dream_world.front_default || "/no-image.png";
   const [isInFavorites, setIsInFavorites] = useState(
     localFavorites.existInFavorites(favoritePokemon)
   );
@@ -44,7 +45,7 @@ const PokemonPage: NextPage<Props> = ({ pokemon }) => {
   };
 
   return (
-    <Layaout title={`Pokémon - ${capitalizeText(pokemon.name)}`}>
+    <Layaout title={`Pokémon - ${capitalizeText(pokemon.name)}`} image={frontDefault}>
       <Grid.Container
         css={{
           marginTop: "5px",
@@ -60,10 +61,7 @@ const PokemonPage: NextPage<Props> = ({ pokemon }) => {
           >
             <Card.Body>
               <Card.Image
-                src={
-                  pokemon.sprites.other?.dream_world.front_default ||
-                  "/no-image.png"
-                }
+                src={frontDefault}
                 alt={pokemon.name}
                 width="100%"
                 height={200}
@@ -142,10 +140,15 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const { name } = params as { name: string };
-  const { data: pokemon } = await pokeApi.get<PokemonResponse>(
-    `/pokemon/${name}`
-  );
+  const { name: pokeName } = params as { name: string };
+  const {
+    data: { id, name, sprites },
+  } = await pokeApi.get<PokemonResponse>(`/pokemon/${pokeName}`);
+  const pokemon = {
+    id,
+    name,
+    sprites,
+  };
 
   return {
     props: {
