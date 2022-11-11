@@ -1,6 +1,14 @@
 import { useState } from "react";
 import { NextPage, GetStaticPaths, GetStaticProps } from "next";
-import { Button, Card, Container, Grid, Image, Text } from "@nextui-org/react";
+import {
+  Button,
+  Card,
+  Container,
+  Grid,
+  Image,
+  Spacer,
+  Text,
+} from "@nextui-org/react";
 import confetti from "canvas-confetti";
 import { pokeApi } from "../../api";
 import { Layaout } from "../../components/layouts";
@@ -8,6 +16,7 @@ import { PokemonResponse, Sprites } from "../../interfaces/pokemon";
 import { localFavorites } from "../../utils";
 import { PokemonListResponse } from "../../interfaces/pokemon-list";
 import { FavoritePokemon } from "../../interfaces/favorite-pokemon";
+import { HeartIcon } from "../../components/ui/HeartIcon";
 
 interface Props {
   pokemon: PokemonResponse;
@@ -45,7 +54,10 @@ const PokemonPage: NextPage<Props> = ({ pokemon }) => {
   };
 
   return (
-    <Layaout title={`Pokémon - ${capitalizeText(pokemon.name)}`} image={frontDefault}>
+    <Layaout
+      title={`Pokémon - ${capitalizeText(pokemon.name)}`}
+      image={frontDefault}
+    >
       <Grid.Container
         css={{
           marginTop: "5px",
@@ -80,13 +92,16 @@ const PokemonPage: NextPage<Props> = ({ pokemon }) => {
               <Text transform="capitalize" h1>
                 {pokemon.name}
               </Text>
-              <Button
-                color="gradient"
-                ghost={!isInFavorites}
-                onClick={onToggleFavorite}
-              >
-                {isInFavorites ? "En favoritos" : "Guardar en favoritos"}
-              </Button>
+              <Grid>
+                <Button
+                  size="sm"
+                  light
+                  color={isInFavorites ? 'error' : 'gradient'}
+                  onClick={onToggleFavorite}
+                  rounded
+                  icon={<HeartIcon fill="currentColor" filled />}
+                />
+              </Grid>
             </Card.Header>
             <Card.Body>
               <Text size={30}>Sprites:</Text>
