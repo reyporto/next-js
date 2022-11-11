@@ -1,8 +1,18 @@
+import { useRouter } from "next/router";
 import { Spacer, Text, Link, useTheme } from "@nextui-org/react";
 import Image from "next/image";
 
 export default function Navbar() {
   const { theme } = useTheme();
+  const router = useRouter();
+
+  const goToHome = () => {
+    router.push("/");
+  };
+
+  const goToFavorites = () => {
+    router.push("/favorites");
+  };
 
   return (
     <div
@@ -22,7 +32,7 @@ export default function Navbar() {
         width={70}
         height={70}
       />
-      <Link href="/">
+      <Link onClick={goToHome}>
         <Text css={{ marginBottom: "5px" }} color="white" h2>
           P
         </Text>
@@ -36,7 +46,7 @@ export default function Navbar() {
           flex: 1,
         }}
       />
-      <Link href="/favorites">
+      <Link onClick={goToFavorites}>
         <Text color="white">Favoritos</Text>
       </Link>
     </div>
