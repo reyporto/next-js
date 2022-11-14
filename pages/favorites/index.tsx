@@ -4,7 +4,7 @@ import { Layaout } from "../../components/layouts";
 import NoFavorites from "../../components/ui/NoFavorites";
 import { localFavorites } from "../../utils";
 import { FavoritePokemons } from "../../components/pokemon";
-import { FavoritePokemon } from '../../interfaces/favorite-pokemon';
+import { FavoritePokemon } from '../../interfaces';
 
 const FavoritesPage: NextPage = () => {
   const [favoritePokemons, setFavoritePokemons] = useState<FavoritePokemon[]>([]);

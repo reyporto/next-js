@@ -1,4 +1,4 @@
-import { FavoritePokemon } from "../interfaces/favorite-pokemon";
+import { FavoritePokemon } from "../interfaces";
 
 const includes = (
   favorites: FavoritePokemon[],

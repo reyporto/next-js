@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Grid } from "@nextui-org/react";
 import { FavoritePokemonCard } from "./FavoritePokemonCard";
-import { FavoritePokemon } from "../../interfaces/favorite-pokemon";
+import { FavoritePokemon } from "../../interfaces";
 
 interface Props {
   pokemons: FavoritePokemon[];

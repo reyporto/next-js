@@ -1,13 +1,11 @@
 import { useState } from "react";
 import { NextPage, GetStaticPaths, GetStaticProps } from "next";
-import { Button, Card, Container, Grid, Image, Text } from "@nextui-org/react";
+import { Button, Card, Grid, Text } from "@nextui-org/react";
 import confetti from "canvas-confetti";
-import { pokeApi } from "../../api";
 import { Layaout } from "../../components/layouts";
-import { PokemonResponse, Sprites } from "../../interfaces/pokemon";
-import { localFavorites } from "../../utils";
-import { PokemonListResponse } from "../../interfaces/pokemon-list";
-import { FavoritePokemon } from "../../interfaces/favorite-pokemon";
+import { PokemonResponse } from "../../interfaces/pokemon";
+import { pokemonInfo, localFavorites } from "../../utils";
+import { FavoritePokemon, PokemonInfo, SmallPokemon } from "../../interfaces";
 import { HeartIcon } from "../../components/ui/HeartIcon";
 import { PokemonSprites } from "../../components/pokemon/PokemonSprites";
 
@@ -84,22 +82,28 @@ const PokemonPage: NextPage<Props> = ({ pokemon }) => {
                 alignItems: "start",
               }}
             >
-              <Grid css={{
-                paddingBottom: 0,
-              }}>
+              <Grid
+                css={{
+                  paddingBottom: 0,
+                }}
+              >
                 <Text transform="capitalize" h1>
                   {pokemon.name}
                 </Text>
               </Grid>
-              <Grid css={{
-                paddingTop: 0,
-              }}>
+              <Grid
+                css={{
+                  paddingTop: 0,
+                }}
+              >
                 <Button
                   size="sm"
                   color={isInFavorites ? "error" : "error"}
                   onClick={onToggleFavorite}
                   shadow={isInFavorites ? true : false}
-                  icon={<HeartIcon fill="currentColor" filled={isInFavorites} />}
+                  icon={
+                    <HeartIcon fill="currentColor" filled={isInFavorites} />
+                  }
                 >
                   Favorito
                 </Button>
@@ -116,35 +120,36 @@ const PokemonPage: NextPage<Props> = ({ pokemon }) => {
 };
 
 export const getStaticPaths: GetStaticPaths = async (ctx) => {
-  const {
-    data: { results },
-  } = await pokeApi.get<PokemonListResponse>("/pokemon?limit=151&offset=0");
+  const pokemons: SmallPokemon[] = await pokemonInfo.getPokemons(151);
 
   return {
-    paths: results.map(({ name }) => ({
+    paths: pokemons.map(({ name }) => ({
       params: {
         name,
       },
     })),
-    fallback: false,
+    fallback: "blocking",
   };
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const { name: pokeName } = params as { name: string };
-  const {
-    data: { id, name, sprites },
-  } = await pokeApi.get<PokemonResponse>(`/pokemon/${pokeName}`);
-  const pokemon = {
-    id,
-    name,
-    sprites,
-  };
+  const { name } = params as { name: string };
+  const pokemon: PokemonInfo | null = await pokemonInfo.getPokemonInfo(name);
+
+  if (!pokemon) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
 
   return {
     props: {
       pokemon,
     },
+    revalidate: 86400,
   };
 };
 
